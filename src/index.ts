@@ -26,17 +26,16 @@ const {
 // middlewares
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(cors());
+app.use(cors({ credentials: true, origin: 'http://localhost:9000' }));
 app.use(cookieParser());
+
+app.use(morgan('dev'));
 
 // routes
 import userRouter from './routes/user.routes';
 import authRouter from './routes/auth.routes';
 app.use('/auth/', authRouter);
 app.use('/api', userRouter);
-
-app.use(morgan('dev'));
-
 // Server listening
 app.listen(port, async () => {
   try {
@@ -48,11 +47,10 @@ app.listen(port, async () => {
       password,
       database,
       entities,
-      logging: true,
+      logging: false,
       synchronize: true
     });
   } catch (error) {
-    console.error(error);
     console.log('Error on db connection');
   }
   console.log('Server on port: ', port);

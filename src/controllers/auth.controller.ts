@@ -24,7 +24,8 @@ export const login = async (req: Request, res: Response) => {
       if (await checkPassword(password, user.password) || password === user.password) {
         const token = createToken(user.id);
         res.cookie('jwt', token, { httpOnly: true, maxAge: 3 * 24 * 60 * 60 * 1000 });
-        res.status(200).json({ message: 'success', user });
+        const id = user.id;
+        res.status(200).json({ message: 'success', id });
       } else {
         invalidCredentials(res); // when password is wrong
       }

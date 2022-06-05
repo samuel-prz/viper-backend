@@ -11,7 +11,6 @@ export const requireAuth = (req: Request, res:Response, next: NextFunction) => {
       console.log(`Request made by: user ${req.currentUser.id}`);
       next();
     } catch (error) {
-      console.log(error);
       res.status(401).json({ message: 'Error on vefify token' });
     }
   } else {
