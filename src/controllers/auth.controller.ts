@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { getUserByUsername } from '../queries/user.queries';
-import checkPassword from '../utils/checkPassword';
+import { encrypt, checkPassword } from '../utils/crypto';
 import { User } from '../models/User';
 
 const invalidCredentials = (res: Response) => {
-  res.status(401).json({ message: 'Datos incorrectos' });
+  res.status(401).json({ message: 'Usuario o contraseña incorrectos.' });
 };
 
 const createToken = (id: number) => {
@@ -22,10 +22,10 @@ export const login = async (req: Request, res: Response) => {
     const user = await getUserByUsername(username);
     if (user) {
       if (await checkPassword(password, user.password) || password === user.password) {
-        const token = createToken(user.id);
-        res.cookie('jwt', token, { httpOnly: true, maxAge: 3 * 24 * 60 * 60 * 1000 });
+        const token = encrypt(createToken(user.id));
+        res.cookie('uID', token, { httpOnly: true, maxAge: 3 * 24 * 60 * 60 * 1000 });
         const id = user.id;
-        res.status(200).json({ message: 'success', id });
+        res.status(200).json({ message: 200, id });
       } else {
         invalidCredentials(res); // when password is wrong
       }
