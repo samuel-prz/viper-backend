@@ -16,7 +16,7 @@ export const encrypt = (val: string) => {
 
 export const decrypt = (hash: string) => {
   try {
-    const decrypted = crypto.AES.decrypt(hash, process.env.CRYPTO_KEY as string).toString(crypto.enc.Utf8);
+    const decrypted = crypto.AES.decrypt(hash ?? '', process.env.CRYPTO_KEY as string).toString(crypto.enc.Utf8);
     return decrypted;
   } catch (error) {
     console.log('Error on decrypt: ', error);
