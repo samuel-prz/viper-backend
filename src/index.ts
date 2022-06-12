@@ -20,22 +20,23 @@ const {
   DB: database,
   DB_HOST: dbHost,
   DB_PORT: dbPort,
-  PORT: port = 8000
+  PORT: port
 } = process.env;
 
 // middlewares
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(cors({ credentials: true, origin: 'http://localhost:9000' }));
+app.use(cors({ credentials: true, origin: process.env.FRONTEND_URL }));
 app.use(cookieParser());
 
 app.use(morgan('dev'));
 
 // routes
 import userRouter from './routes/user.routes';
+import clientRouter from './routes/client.routes';
 import authRouter from './routes/auth.routes';
 app.use('/auth/', authRouter);
-app.use('/api', userRouter);
+app.use('/api', userRouter, clientRouter);
 // Server listening
 app.listen(port, async () => {
   try {

@@ -23,7 +23,7 @@ export const login = async (req: Request, res: Response) => {
     if (user) {
       if (await checkPassword(password, user.password) || password === user.password) {
         const token = encrypt(createToken(user.id));
-        res.cookie('uID', token, { httpOnly: true, maxAge: 3 * 24 * 60 * 60 * 1000 });
+        res.cookie('uID', token, { httpOnly: true, maxAge: 3 * 24 * 60 * 60 * 1000, sameSite: true }); // recommend to use secure: true
         res.cookie('timeSession', encrypt((Date.now()).toString()));
         const id = user.id;
         res.status(200).json({ message: 200, id });
