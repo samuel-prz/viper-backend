@@ -10,16 +10,16 @@ export const create = async (req: Request, res: Response) => {
     client.phone = req.body.phone;
     client.email = req.body.email;
     client.address = req.body.address;
-    client.companyName = req.body.companyData.companyName;
-    client.rnc = req.body.companyData.rnc;
-    client.companyPhone = req.body.companyData.companyPhone;
-    client.companyEmail = req.body.companyData.companyEmail;
-    client.companyAddress = req.body.companyData.companyAddress;
+    client.companyName = req.body.companyName;
+    client.rnc = req.body.rnc;
+    client.companyPhone = req.body.companyPhone;
+    client.companyEmail = req.body.companyEmail;
+    client.companyAddress = req.body.companyAddress;
     client.hasCompanyInfo = req.body.hasCompanyInfo;
     client.hasInfoCopied = req.body.hasInfoCopied;
-    client.factDays = req.body.config.factDays;
-    client.factAuto = req.body.config.factAuto;
-    client.sendFact = req.body.config.sendFact;
+    client.factDays = req.body.factDays;
+    client.factAuto = req.body.factAuto;
+    client.sendFact = req.body.sendFact;
     client.sendNotification = req.body.sendNotification;
     client.isActive = true;
     const newClient = await client.save();
@@ -32,6 +32,7 @@ export const create = async (req: Request, res: Response) => {
 
 export const getAll = async (_req: Request, res: Response) => {
   try {
+    console.log('getAll');
     const clients = await Client.find({ where: { isActive: true } });
     res.status(200).json({ clients });
   } catch (error: any) {

@@ -8,34 +8,34 @@ export class Client extends BaseEntity {
     @Column()
       name!: string;
 
-    @Column()
+    @Column({ nullable: true })
       nickname!: string;
 
-    @Column({ unique: true })
+    @Column()
       cedula!: string;
 
     @Column({ nullable: true })
       phone!: string;
 
-    @Column({ unique: true })
+    @Column({ nullable: true })
       email!: string;
 
     @Column()
       address!: string;
 
-    @Column()
+    @Column({ nullable: true })
       companyName!: string;
 
-    @Column({ unique: true })
+    @Column({ nullable: true })
       rnc!: string;
 
     @Column({ nullable: true })
       companyPhone!: string;
 
-    @Column({ unique: true })
+    @Column({ nullable: true })
       companyEmail!: string;
 
-    @Column()
+    @Column({ nullable: true })
       companyAddress!: string;
 
     @Column({ default: false })

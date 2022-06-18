@@ -5,11 +5,13 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { createConnection } from 'typeorm';
 import { User } from './models/User';
+import { Client } from './models/Client';
 
 const app: Application = express();
 
 const entities = [
-  User
+  User,
+  Client
 ];
 
 // config vars
@@ -52,7 +54,7 @@ app.listen(port, async () => {
       synchronize: true
     });
   } catch (error) {
-    console.log('Error on db connection');
+    console.log('Error on db connection: ', error);
   }
   console.log('Server on port: ', port);
 });

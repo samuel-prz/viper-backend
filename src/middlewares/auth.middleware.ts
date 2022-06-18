@@ -17,11 +17,12 @@ export const requireAuth = (req: Request, res:Response, next: NextFunction) => {
       res.status(401).json({ message: 'Error on vefify token' });
     }
   } else {
-    console.log('Tu sesión a caducado: ' + (parseInt(timeSession ?? '') + 40 < Date.now()));
+    // If token is not valid, check if the session is expired by comparing the time of the last session with the current time
     if (parseInt(timeSession ?? '') + expiration < Date.now()) {
-      // code 3 is for session expired
-      res.status(401).json({ code: 3, message: 'Tu sesión a caducado. Inicia nuevamente.' });
+      // code 440 is for session expired, 440 Login Time-out
+      res.status(440).json({ message: 'Session expired.' });
     } else {
+      // If the session is not expired, continue with the request with unvalid token error 401
       res.status(401).json({ message: 'No token provided.' });
     }
   }
