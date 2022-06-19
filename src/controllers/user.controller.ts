@@ -14,7 +14,7 @@ export const create = async (req: Request, res: Response) => {
     user.phone = req.body.phone;
     user.email = req.body.email;
     const newUser = await user.save();
-    res.status(201).json({ message: 'success', user: newUser });
+    res.status(201).json(newUser);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
     console.log('Server error: ', error);
@@ -23,8 +23,8 @@ export const create = async (req: Request, res: Response) => {
 
 export const getAll = async (_req: Request, res: Response) => {
   try {
-    const users = await User.find({ where: { isActive: true } });
-    res.status(200).json({ users });
+    const users = await User.find();
+    res.status(200).json(users);
   } catch (error: any) {
     console.log('Server error: ', error);
   }

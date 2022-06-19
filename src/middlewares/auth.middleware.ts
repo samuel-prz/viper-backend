@@ -11,10 +11,9 @@ export const requireAuth = (req: Request, res:Response, next: NextFunction) => {
     try {
       // verify if it is a valid token
       req.currentUser = jwt.verify(token, process.env.TOKEN_SCRT as string) as CurrentUser;
-      console.log(`Request made by: user ${req.currentUser.id}`);
       next();
     } catch (error) {
-      res.status(401).json({ message: 'Error on vefify token' });
+      res.status(401).json({ message: 'Error on verify token.' });
     }
   } else {
     // If token is not valid, check if the session is expired by comparing the time of the last session with the current time
