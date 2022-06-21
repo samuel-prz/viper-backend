@@ -3,6 +3,7 @@ import express, { Application } from 'express';
 import morgan from 'morgan'; // HTTP request logger middleware
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import { requestLimiter } from './utils/requestLimiter';
 import { createConnection } from 'typeorm';
 import { User } from './models/User';
 import { Client } from './models/Client';
@@ -30,8 +31,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors({ credentials: true, origin: process.env.FRONTEND_URL }));
 app.use(cookieParser());
-
 app.use(morgan('dev'));
+app.use(requestLimiter()); // Apply the rate limiting middleware to all requests (for now)
 
 // routes
 import userRouter from './routes/user.routes';
