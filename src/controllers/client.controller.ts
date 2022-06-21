@@ -62,7 +62,7 @@ export const deleteClient = async (req: Request, res: Response) => {
       res.sendStatus(204);
     } else res.status(404).json({ message: 'Usuario no encontrado...' });
   } catch (error: any) {
-    res.status(500).json({ message: 'Server error on client.update' });
+    res.status(500).json({ message: 'Server error on client.delete' });
     console.log('Server error: ', error);
   }
 };
