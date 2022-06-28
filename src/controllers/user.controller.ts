@@ -24,7 +24,7 @@ export const create = async (req: Request, res: Response) => {
 export const update = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const user = await User.findOne({ where: { id: Number(id), isActive: true } });
+    const user = await User.findOne({ where: { id: Number(id) } });
     if (user) { User.update({ id: parseInt(id) }, req.body); res.sendStatus(204); } else res.status(404).json({ message: 'findOne Function Error' });
   } catch (error: any) {
     res.status(500).json({ message: 'Server error on user.update' });
@@ -35,8 +35,10 @@ export const update = async (req: Request, res: Response) => {
 export const fetch = async (_req: Request, res: Response) => {
   try {
     const all = await User.find();
-    const onlyActives = all.filter(all => all.isActive);
-    res.status(200).json({ all, onlyActives });
+    if (all.length > 0) {
+      const onlyActives = all.filter(all => all.isActive);
+      res.status(200).json({ all, onlyActives });
+    } else res.status(204).json();
   } catch (error: any) {
     res.status(500).json({ message: 'Server error on user.get' });
     console.log('Server error: ', error);
@@ -50,7 +52,7 @@ export const deleteUser = async (req: Request, res: Response) => {
     if (user) {
       user.isActive = false;
       await User.save(user);
-      res.sendStatus(204);
+      res.status(204).json();
     } else res.status(404).json({ message: 'Usuario no encontrado...' });
   } catch (error: any) {
     res.status(500).json({ message: 'Server error on user.delete' });
