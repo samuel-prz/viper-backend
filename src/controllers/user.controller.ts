@@ -14,29 +14,33 @@ export const create = async (req: Request, res: Response) => {
     user.phone = req.body.phone;
     user.email = req.body.email;
     const newUser = await user.save();
-    res.status(201).json(newUser);
+    res.status(201).json(newUser.id);
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: 'Server error on user.create' });
     console.log('Server error: ', error);
   }
 };
 
-export const getAll = async (_req: Request, res: Response) => {
-  try {
-    const users = await User.find();
-    res.status(200).json(users);
-  } catch (error: any) {
-    console.log('Server error: ', error);
-  }
-};
-
-export const getOne = async (req: Request, res: Response) => {
+export const update = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const user = await User.findOne({ where: { id: Number(id), isActive: true } });
-    if (user) res.status(200).json({ user });
-    else res.status(404).json({ message: 'Usuario no encontrado...' });
+    const user = await User.findOne({ where: { id: Number(id) } });
+    if (user) { User.update({ id: parseInt(id) }, req.body); res.sendStatus(204); } else res.status(404).json({ message: 'findOne Function Error' });
   } catch (error: any) {
+    res.status(500).json({ message: 'Server error on user.update' });
+    console.log('Server error: ', error);
+  }
+};
+
+export const fetch = async (_req: Request, res: Response) => {
+  try {
+    const all = await User.find();
+    if (all.length > 0) {
+      const onlyActives = all.filter(all => all.isActive);
+      res.status(200).json({ all, onlyActives });
+    } else res.status(204).json();
+  } catch (error: any) {
+    res.status(500).json({ message: 'Server error on user.get' });
     console.log('Server error: ', error);
   }
 };
@@ -44,12 +48,14 @@ export const getOne = async (req: Request, res: Response) => {
 export const deleteUser = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const user = await User.findOne({ where: { id: Number(id) } });
+    const user = await User.findOne({ where: { id: Number(id), isActive: true } });
     if (user) {
       user.isActive = false;
-      res.status(200).json({ message: 'Usuario eliminado correctamente' });
-    } else res.status(404).json({ message: 'Usuario no existe...' });
-  } catch (error) {
+      await User.save(user);
+      res.status(204).json();
+    } else res.status(404).json({ message: 'Usuario no encontrado...' });
+  } catch (error: any) {
+    res.status(500).json({ message: 'Server error on user.delete' });
     console.log('Server error: ', error);
   }
 };
